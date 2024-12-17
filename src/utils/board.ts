@@ -26,6 +26,13 @@ export const getCoords = <TCard extends Card>(
 		endPos: e.destination?.index
 	}
 
+	if ( 'BOARD' === e.type ) {
+		return {
+			src: columnSrc,
+			dist: columnDist
+		}
+	}
+
 	return {
 		src: {
 			...columnSrc,
