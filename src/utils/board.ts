@@ -12,14 +12,27 @@ export interface Coordinates {
 	}
 }
 
-const getColumn = <TCard extends Card>(
+export const getCard = <TCard extends Card>(
+	board: KanbanBoard<TCard>,
+	srcCoordinate: Coordinates['src']
+): TCard => {
+	const column = board.columns.find( ( column: any ) => column.id === srcCoordinate.startColId )
+
+	if ( ! column ) {
+		throw new Error( `Cannot find column: ${ srcCoordinate.startColId }` )
+	}
+
+	return column.cards[ srcCoordinate.startPos ]
+}
+
+export const getColumn = <TCard extends Card>(
 	board: KanbanBoard<TCard>,
 	droppableId: string
 ): Column<TCard> | undefined => {
 	return board.columns.find(({ id }: any) => String( id ) === droppableId)
 }
 
-const getColumnStrict = <TCard extends Card>(
+export const getColumnStrict = <TCard extends Card>(
 	board: KanbanBoard<TCard>,
 	droppableId: any
 ): Column<TCard> => {
@@ -31,6 +44,21 @@ const getColumnStrict = <TCard extends Card>(
 	}
 
 	return column
+}
+
+export const isMovingColumn = ( type: string ) => {
+	return 'BOARD' === type
+}
+
+export const isMovingColumnPosition = ( coordinates: Partial<Coordinates> ) => {
+	return coordinates.src?.startPos !== coordinates.dist?.endPos
+}
+
+export const isMovingCardPosition = ( coordinates: Partial<Coordinates> ) => {
+	return (
+		coordinates.src?.startPos === coordinates.dist?.endPos &&
+		coordinates.src?.startColId === coordinates.dist?.endColId
+	)
 }
 
 export const getCoordinates = <TCard extends Card>(
