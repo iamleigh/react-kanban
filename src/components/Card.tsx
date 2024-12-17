@@ -1,32 +1,30 @@
-import React from "react"
+import { Card } from "@/types"
 
-interface CardProps {
-	title?: string
-	description?: string
+interface Props<TCard extends Card> {
+	children: TCard
 	dragging: boolean
 	allowRemoveCard: boolean
-	onCardRemove?: () => void
+	onCardRemove?: (card: TCard) => void
 }
 
-export const Card: React.FC<CardProps> = ({
-	title,
-	description,
+export const DefaultCard = <TCard extends Card>({
+	children: card,
 	dragging,
 	allowRemoveCard,
 	onCardRemove
-}) => {
+}: Props<TCard>) => {
 	return (
 		<div className={`kanban-card ${dragging ? 'kanban-card--dragging' : ''}`}>
 			<span>
 				<div className="react-kanban-card__title">
-					<span>{title}</span>
+					<span>{ card.title }</span>
 					{ allowRemoveCard && (
-						<span style={{ cursor: 'pointer' }} onClick={onCardRemove ? () => onCardRemove() : undefined}>X</span>
+						<span style={{ cursor: 'pointer' }} onClick={onCardRemove ? () => onCardRemove( card ) : undefined}>X</span>
 					)}
 				</div>
 			</span>
 
-			<div className="kanban-card__description">{ description }</div>
+			<div className="kanban-card__description">{ card.description }</div>
 		</div>
 	);
 }
