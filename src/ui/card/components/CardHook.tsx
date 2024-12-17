@@ -7,7 +7,7 @@ interface Props<TCard extends Card> {
 	onCardRemove?: (card: TCard) => void
 }
 
-export const DefaultCard = <TCard extends Card>({
+export const CardHook = <TCard extends Card>({
 	children: card,
 	dragging,
 	allowRemoveCard,
