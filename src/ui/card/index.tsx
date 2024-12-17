@@ -1,3 +1,5 @@
 export * from './components/CardType'
 export * from './components/CardHook'
 export * from './components/CardElement'
+export * from './components/CardEdit'
+export * from './components/CardAdd'
