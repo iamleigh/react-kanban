@@ -1,7 +1,7 @@
 import { DropResult } from "@hello-pangea/dnd";
 import { Card, Column, KanbanBoard } from "@/types";
 
-interface Cords {
+export interface Coordinates {
 	src: {
 		startPos: number
 		startColId?: string | number
@@ -12,19 +12,35 @@ interface Cords {
 	}
 }
 
-export const getCoords = <TCard extends Card>(
+const getColumn = <TCard extends Card>(
+	board: KanbanBoard<TCard>,
+	droppableId: string
+): Column<TCard> | undefined => {
+	return board.columns.find(({ id }: any) => String( id ) === droppableId)
+}
+
+const getColumnStrict = <TCard extends Card>(
+	board: KanbanBoard<TCard>,
+	droppableId: any
+): Column<TCard> => {
+	const column = getColumn<TCard>(board, droppableId)
+
+	// Check if column is undefined
+	if ( ! column ) {
+		throw new Error( `Cannot find column with ID: ${ droppableId }` )
+	}
+
+	return column
+}
+
+export const getCoordinates = <TCard extends Card>(
 	e: DropResult,
 	board: KanbanBoard<TCard>
-): Partial<Cords> => {
+): Partial<Coordinates> => {
 	if ( null === e.destination ) return {}
 
-	const columnSrc = {
-		startPos: e.source.index
-	}
-
-	const columnDist = {
-		endPos: e.destination?.index
-	}
+	const columnSrc = { startPos: e.source.index }
+	const columnDist = { endPos: e.destination?.index }
 
 	if ( 'BOARD' === e.type ) {
 		return {
@@ -36,11 +52,11 @@ export const getCoords = <TCard extends Card>(
 	return {
 		src: {
 			...columnSrc,
-			startColId: ''
+			startColId: getColumnStrict<TCard>(board, e.source.droppableId).id
 		},
 		dist: {
 			...columnDist,
-			endColId: ''
+			endColId: getColumnStrict<TCard>(board, e.destination?.droppableId).id
 		}
 	}
 }
