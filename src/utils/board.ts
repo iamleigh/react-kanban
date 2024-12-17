@@ -12,7 +12,7 @@ interface Cords {
 	}
 }
 
-const getCoords = <TCard extends Card>(
+export const getCoords = <TCard extends Card>(
 	e: DropResult,
 	board: KanbanBoard<TCard>
 ): Partial<Cords> => {
