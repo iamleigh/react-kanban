@@ -1,12 +1,12 @@
 import React from "react";
 
-interface ColumnTitleProps {
+interface Props {
 	allowRenameColumn: boolean
 	onClick: React.DOMAttributes<HTMLSpanElement>['onClick']
 	children: string
 }
 
-export const ColumnTitle: React.FC<ColumnTitleProps> = ({
+export const ColumnTitle: React.FC<Props> = ({
 	allowRenameColumn,
 	onClick,
 	children: title
